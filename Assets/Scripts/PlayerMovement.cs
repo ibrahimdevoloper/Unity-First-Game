@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D body;
-    [SerializeField] private  float speed;
+    [SerializeField] private float speed;
     [SerializeField] private float jumpSpeed;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask wallLayer;
@@ -31,10 +31,10 @@ public class PlayerMovement : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
 
         // flip the character while moving
-        if (horizontalInput>00.1f)
+        if (horizontalInput > 00.1f)
             transform.localScale = Vector3.one;
-        else if (horizontalInput <= -00.1f) 
-                transform.localScale = new Vector3(-1,1,1);
+        else if (horizontalInput <= -00.1f)
+            transform.localScale = new Vector3(-1, 1, 1);
 
         animator.SetBool("run", horizontalInput != 0);
         animator.SetBool("grounded", isGrounded());
@@ -58,18 +58,21 @@ public class PlayerMovement : MonoBehaviour
                 jump();
             }
         }
-        else {
-            wallJumpCooldown += Time.deltaTime; 
+        else
+        {
+            wallJumpCooldown += Time.deltaTime;
         }
     }
 
-    void jump() {
+    void jump()
+    {
         if (isGrounded())
         {
             body.velocity = new Vector2(body.velocity.x, jumpSpeed);
             animator.SetTrigger("jump");
         }
-        else if (isWalled() && !isGrounded()) {
+        else if (isWalled() && !isGrounded())
+        {
             wallJumpCooldown = 0f;
 
             if (horizontalInput == 0)
@@ -87,16 +90,17 @@ public class PlayerMovement : MonoBehaviour
     {
     }
 
-    bool isGrounded() {
+    bool isGrounded()
+    {
         // (origin of the BoxCast, the size of it, rotation, direction, distance, Layermask)
-        RaycastHit2D raycast = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f,groundLayer);
+        RaycastHit2D raycast = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
         return raycast.collider != null;
     }
 
     bool isWalled()
     {
         // (origin of the BoxCast, the size of it, rotation, direction, distance, Layermask)
-        RaycastHit2D raycast = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, new Vector2(transform.localScale.x,0), 0.1f, wallLayer);
+        RaycastHit2D raycast = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
         return raycast.collider != null;
     }
 }
